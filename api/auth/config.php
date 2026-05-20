@@ -9,13 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200); exit();
 }
 
-$host   = 'localhost';
-$db     = 'smilecare_db';      
-$user   = 'root';            
-$pass   = '';                
+$host = getenv('MYSQLHOST')     ?: 'localhost';
+$db   = getenv('MYSQLDATABASE') ?: 'smilecare_db';
+$user = getenv('MYSQLUSER')     ?: 'root';
+$pass = getenv('MYSQLPASSWORD') ?: '';
+$port = getenv('MYSQLPORT')     ?: '3306';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     http_response_code(500);
